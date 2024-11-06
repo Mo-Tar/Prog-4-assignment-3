@@ -1,0 +1,20 @@
+50001;GeniousBuilders;788 30th St., SE, Calgary;Fred
+50002;Pong Ping;749 Dufferin Blvd., SE, Calgary;Jacob
+50003;Wileys Inc.;26 40th St., SE, Calgary;BillyBob
+50004;WinManufacturing Inc.;258 51st Ave., SE, Calgary;Marty
+50005;Grab Bag Inc.;138 42nd Ave., NE, Calgary;Monty
+50006;PoneyManufacturing;311 McCall Way, NE, Calgary;Barney
+50007;Smiles Industries;966 Smed Lane, SE, Calgary;Lisa
+50008;Thangs Inc.;879 37th Ave., NE, Calgary;Thelma
+50009;Flip Works Inc.;472 Ogden Dale Rd., SE, Calgary;Rory
+50010;Irkle Industries;754 Sunridge Way, NE, Calgary;Irma
+50011;Biff Builders;690 19th St., NE, Calgary;Borjn
+50012;Twinkles Inc.;318 29th St.,NE, Calgary;Barkley
+50013;Piddles Industries;238 112th Ave., NE, Calgary;Parnell
+50014;Tic Tac Manufacturing;598 Palmer Rd., NE, Calgary;Sarah
+50015;Knock Knock Inc.;363 42nd Ave., NE, Calgary;Ned
+50016;Corky Things Inc.;35 McCall Way, NE, Calgary;Corrine
+50017;E & O Industries;883 44th St., SE, Calgary;Stan
+50018;Fiddleys Makes Stuff Inc.;350 27th St., NE, Calgary;Fredda
+50019;Horks and Stuff Manufacturing;997 42nd Ave., NE, Calgary;Harold
+50020;Wings Works;754 48th St., SE, Calgary;Wing
