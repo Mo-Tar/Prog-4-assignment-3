@@ -1,42 +1,45 @@
 import random
+import requests
 from datetime import datetime
 
 ##########################################################
 # Read functions to work with item.txt anf suppliers.txt #
 ##########################################################
 
-def read_items(file_path):
+
+def read_items_from_json():
+    response = requests.get('http://34.29.246.163:8080/api/items')
+    
     items = []
     try:
-        with open(file_path, 'r') as f:
-            for line in f:
-                part = line.strip().split(';')
-                items.append({
-                    'id': (part[0]),
-                    'name': part[1],
-                    'quantity': int(part[2]),
-                    'price': float(part[3]),
-                    'supplier_id':(part[4])
-                })
-    except FileNotFoundError:
-        print(f"File not found: {file_path}")
+        for entry in response.json():
+            items.append({
+                'id': entry['ItemID'],
+                'name': entry['Name'],
+                'quantity': int(entry['Quantity']),
+                'price': float(entry['Price']),
+                'supplier_id': entry['SupplierID']
+            })
+    except KeyError as e:
+        print(f"Missing key in JSON data: {e}")
     return items
 
-def read_suppliers(file_path):
+
+def read_suppliers_from_json():
+    response = requests.get('http://34.29.246.163:8080/api/suppliers')
     suppliers = []
     try:
-        with open (file_path, 'r') as f:
-            for line in f:
-                part = line.strip().split(';')
-                suppliers.append({
-                    'id': (part[0]),
-                    'company name': part[1],
-                    'address': part[2],
-                    'sales person contact': part[3]
-                })
-    except FileNotFoundError:
-        print(f"File not found: {file_path}")
+        for entry in response.json():
+            suppliers.append({
+                'id': entry['SupplierID'],
+                'company name': entry['Name'],
+                'address': entry['Address'],
+                'sales person contact': entry['SalesPersonContact']
+            })
+    except KeyError as e:
+        print(f"Missing key in JSON data: {e}")
     return suppliers
+
 
 ##########################
 # Search functions BELOW #
@@ -90,6 +93,7 @@ def delete_tool(search_value, items, file_path):
   else:
       print(f"No item with the ID or name '{search_value}' was found.")
 
+
 ####################################################
 # Functions that keep the item.txt file up to date #
 ####################################################
@@ -136,7 +140,7 @@ def check_item_quantity(items):
         return "There are no items below 10 quantity"
 
 def get_supplier_name(supplier_id):
-    suppliers = read_suppliers("suppliers.txt")
+    suppliers = read_suppliers_from_json()
     for supplier in suppliers:
         if supplier['id'] == supplier_id:
             return supplier['company name']
@@ -205,15 +209,16 @@ def display_modify_inventory(items, file_path):
         user_input = input("Please select an option (1-4): ").strip()
         match user_input:
             case "1":
-                user_input_id = validate_item_id(items, "Please input ID of tool: ")
-                user_input_name = input("Please input name of tool: ").strip()
-                user_input_quantity = validate_numerical_input("Please input quantity of tool: ")
-                user_input_price = validate_numerical_input("Please input price of tool: ")
-                user_input_supplier_id = validate_supplier_id("Please input supplier ID: ")
-                add_item(file_path, user_input_id, user_input_name, user_input_quantity, user_input_price, user_input_supplier_id, items)
+                # user_input_id = validate_item_id(items, "Please input ID of tool: ")
+                # user_input_name = input("Please input name of tool: ").strip()
+                # user_input_quantity = validate_numerical_input("Please input quantity of tool: ")
+                # user_input_price = validate_numerical_input("Please input price of tool: ")
+                # user_input_supplier_id = validate_supplier_id("Please input supplier ID: ")
+                # add_item(file_path, user_input_id, user_input_name, user_input_quantity, user_input_price, user_input_supplier_id, items)
+                print("")
             case "2":
                 user_input_search_id = input("Please input the ID or name of the tool: ").strip()
-                delete_tool(user_input_search_id, items, file_path)
+                # delete_tool(user_input_search_id, items, file_path)
             case "3":
                 check_item_quantity(items)
 
@@ -274,7 +279,7 @@ def validate_numerical_input(message_prompt):
         print("Input must be a numerical number.")
 
 def validate_supplier_id(message_prompt):
-        suppliers = read_suppliers("suppliers.txt")
+        suppliers = read_suppliers_from_json()
         while True:
             user_input_supplier_id = validate_numerical_input(message_prompt)
             for supplier in suppliers:
@@ -288,7 +293,9 @@ def validate_supplier_id(message_prompt):
 
 def main():
     items_file = 'items.txt'
-    items = read_items(items_file)
+    items = read_items_from_json()
+    suppliers = read_suppliers_from_json()
+    print(suppliers)
     display_main_menu(items, items_file)
   
 if __name__ == "__main__":

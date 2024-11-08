@@ -36,6 +36,26 @@ module.exports.register = (app, database) => {
         res.status(200).send(JSON.stringify(inventoryItems)).end();
     });
 
+    //Gets the name of suppliers and show all suppliers
+    app.get('/api/suppliers', async (req, res) => {
+        let query;
+        const _name = req.query.name;
+
+        if (_name) {
+            query = database.query('SELECT * FROM Suppliers WHERE Name =?',[_name]);
+        } else {
+            query = database.query('SELECT * FROM Suppliers');
+        }
+        
+        const supplier = await query;
+
+        if (supplier.length === 0) {
+            return res.status(404).json({ message: "No items found"});
+        }
+
+        res.status(200).send(JSON.stringify(supplier)).end();
+    });
+
     //Body parameter to add new items to inventory
     app.post('/api/items', async (req, res) => {
         const { ItemID, Name, Quantity, Price, SupplierID } = req.body;
