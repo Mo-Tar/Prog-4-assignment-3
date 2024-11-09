@@ -115,12 +115,13 @@ No authentication is required for this API.
 **Description**: Updates the quantity of an existing item in the inventory.
 
 **Example Request**:
-`PUT /api/items?id=3000`
+`PUT /api/items`
 
 **Request Body Sample**:
 ```json
 {
-  "Quantity": 19
+  "ItemID": 3000,
+  "Quantity": 22
 }
 ```
 
