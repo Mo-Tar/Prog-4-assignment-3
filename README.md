@@ -13,11 +13,10 @@ No authentication is required for this API.
 
 ## Endpoints Overview
 - [GET /api/items](#get-items)
-- [GET /api/items/?name={name}](#get-items-by-name)
 - [GET /api/items/{id}](#get-items-by-id)
 - [POST /api/items](#post-items)
-- [PUT /api/items?id={id}](#put-items-by-id)
-- [DELETE /api/items?id={id}](#delete-items-by-id)
+- [PUT /api/items](#put-items-by-id)
+- [DELETE /api/items}](#delete-items-by-id)
 
 ---
 
@@ -29,28 +28,13 @@ No authentication is required for this API.
 **Endpoint**: `/api/items`
 
 **Parameters**: 
+- `name` (query parameter, optional): The name of the item to search for.
 
-**Description**: Retrieves a list of all items in the inventory.
-
-**Example Request**:
-`GET /api/items`
-
----
-
-<a id="get-items-by-name"></a>
-### GET /api/items/?name={name}
-
-**Method**: `GET`
-
-**Endpoint**: `/api/items`
-
-**Parameters**: 
-- `name` (query parameter): The name of the item to search for.
-
-**Description**: Returns information of an item identified by its name.
+**Description**: Retrieves a list of all items in the inventory or searches for items by name.
 
 **Example Request**:
-`GET /api/items/?name=Knock Bits`
+- `GET /api/items`
+- `GET /api/items/?name=Knock Bits`
 
 ---
 
@@ -66,7 +50,8 @@ No authentication is required for this API.
 **Description**: Returns information of an item identified by its ID.
 
 **Example Request**:
-`GET /api/items/3000`
+
+- `GET /api/items/3000`
 
 ---
 
@@ -87,7 +72,7 @@ No authentication is required for this API.
 **Description**: Adds a new item to the inventory.
 
 **Example Request**:
-`POST /api/items`
+- `POST /api/items`
 
 **Request Body Sample**:
 ```json
@@ -102,26 +87,26 @@ No authentication is required for this API.
 
 ---
 <a id="put-items-by-id"></a>
-### PUT /api/items?id={id}
+### PUT /api/items
 
 **Method**: `PUT`
 
 **Endpoint**: `/api/items`
 
 **Parameters**: 
-- `ItemID` (query parameter): The ID of the item to be updated.
+- `ItemID` (body parameter): The ID of the item to be updated.
 - `Quantity` (body parameter): The new quantity value for the item.
 
 **Description**: Updates the quantity of an existing item in the inventory.
 
 **Example Request**:
-`PUT /api/items`
+- `PUT /api/items`
 
 **Request Body Sample**:
 ```json
 {
-  "ItemID": 3000,
-  "Quantity": 22
+  "ItemID":3000,
+  "Quantity": 19
 }
 ```
 
@@ -134,12 +119,18 @@ No authentication is required for this API.
 **Endpoint**: `/api/items`
 
 **Parameters**: 
-- `ItemID` (query parameter): The ID of the item to be deleted.
+- `id` (query parameter, optional): The ID of the item to be deleted.
+- `name` (query parameter, optional): The name of the item to be deleted.
 
-**Description**: Deletes an item from the inventory based on its ID.
+**Note**: At least one of `id` or `name` must be provided to successfully delete an item.
+
+**Description**: Deletes an item from the inventory by ID or name.
 
 **Example Request**:
-`DELETE /api/items?id=3000`
+
+- `DELETE /api/items?id=3000`
+
+- `DELETE /api/items?name=Knock Bits`
 
 ---
 
