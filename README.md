@@ -112,7 +112,7 @@ No authentication is required for this API.
 
 ---
 <a id="delete-items-by-id"></a>
-### DELETE /api/items?id={id}
+### DELETE /api/items
 
 **Method**: `DELETE`
 
