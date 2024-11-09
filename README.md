@@ -1,44 +1,146 @@
 # COMP 3504 - Tool Inventory Management System
 
-## Overview
+## API Overview
+This API allows users to search, add, update, and delete tools from a tool inventory.
 
-This project is a simple inventory management system for a retail shop that sells tools. The program allows the store owner to:
+### Base URL
+`http://34.29.246.163:8080/api`
 
-- Add and delete tools from the inventory.
-- Search for tools by tool nameor tool ID.
-- Automatically generate order lines when the quantity of a tool falls below a specified threshold.
+### Authentication
+No authentication is required for this API.
 
-The project is divided into two 1-week sprints, following agile best practices. The development is done collaboratively using GitHub for version control.
+---
 
-## Programming Language
+## Endpoints Overview
+- [GET /api/items](#get-items)
+- [GET /api/items/?name={name}](#get-items-by-name)
+- [GET /api/items/{id}](#get-items-by-id)
+- [POST /api/items](#post-items)
+- [PUT /api/items?id={id}](#put-items-by-id)
+- [DELETE /api/items?id={id}](#delete-items-by-id)
 
-The application is implemented in Python.
+---
 
+<a id="get-items"></a>
+### GET /api/items
 
-## Features
-1. **Add and Delete Tools**: The owner can add new tools to the inventory or delete them.
-2. **Search for Tools**: Tools can be searched by name or ID.
-3. **Inventory Management**: The system checks if the quantity of an item falls below 10. If so, it automatically generates an order.
-4. **Order Generation**: Orders are written to orders.txt and include tool details, supplier information, and total costs.
-5. **Data Storage**: Tool information is read from items.txt, and supplier information is read from suppliers.txt.
+**Method**: `GET`
 
-## Files
-- **main.py**: Contains the code for the program.
-- **items.txt**: Contains information on tools, including ID, name, quantity, price, and supplier ID.
-- **suppliers.txt**: Stores supplier details such as ID, company name, address, and salesperson contact.
-- **orders.txt**: Stores order details when inventory falls below the threshold.
+**Endpoint**: `/api/items`
 
-## Usage
-1. **Launch the Program**
-   - Run **'main.py'** file to start the program.
-   - You'll be greeted with the **Inventory Menu**.
-1. **Main Menu Options**
-   - Select the desired option:
-       1. **Modify Inventory**: Add, delete, or check the quantity of each item in stock and generate an order line to restock items below 10.
-       2. **Search Inventory**: Search for tools by name or ID.
-       3. **Exit**: Closes the program.
+**Parameters**: 
 
-     
+**Description**: Retrieves a list of all items in the inventory.
+
+**Example Request**:
+`GET /api/items`
+
+---
+
+<a id="get-items-by-name"></a>
+### GET /api/items/?name={name}
+
+**Method**: `GET`
+
+**Endpoint**: `/api/items`
+
+**Parameters**: 
+- `name` (query parameter): The name of the item to search for.
+
+**Description**: Returns information of an item identified by its name.
+
+**Example Request**:
+`GET /api/items/?name=Knock Bits`
+
+---
+
+<a id="get-items-by-id"></a>
+### GET /api/items/{id}
+
+**Method**: `GET`
+
+**Endpoint**: `/api/items/{id}`
+
+**Parameters**: 
+
+**Description**: Returns information of an item identified by its ID.
+
+**Example Request**:
+`GET /api/items/3000`
+
+---
+
+<a id="post-items"></a>
+### POST /api/items
+
+**Method**: `POST`
+
+**Endpoint**: `/api/items`
+
+**Parameters**: 
+- `ItemID` (body parameter): The ID of the item to be added into the inventory.
+- `Name`(body parameter): The name of item to be added into the inventory.
+- `Quantity`(body parameter): The number of units available for the item.
+- `Price`(body parameter): The price of single unit of the item.
+- `SupplierID`(body parameter): The supplier ID. 
+
+**Description**: Adds a new item to the inventory.
+
+**Example Request**:
+`POST /api/items`
+
+**Request Body Sample**:
+```json
+{
+  "ItemID": 4000,
+  "Name": "New Item Name",
+  "Quantity": 19,
+  "Price": 12.67,
+  "SupplierID": 50015
+}
+```
+
+---
+<a id="put-items-by-id"></a>
+### PUT /api/items?id={id}
+
+**Method**: `PUT`
+
+**Endpoint**: `/api/items`
+
+**Parameters**: 
+- `ItemID` (query parameter): The ID of the item to be updated.
+- `Quantity` (body parameter): The new quantity value for the item.
+
+**Description**: Updates the quantity of an existing item in the inventory.
+
+**Example Request**:
+`PUT /api/items?id=3000`
+
+**Request Body Sample**:
+```json
+{
+  "Quantity": 19
+}
+```
+
+---
+<a id="delete-items-by-id"></a>
+### DELETE /api/items?id={id}
+
+**Method**: `DELETE`
+
+**Endpoint**: `/api/items`
+
+**Parameters**: 
+- `ItemID` (query parameter): The ID of the item to be deleted.
+
+**Description**: Deletes an item from the inventory based on its ID.
+
+**Example Request**:
+`DELETE /api/items?id=3000`
+
+---
 
 ## Contribution
-- All team members contributed equally to the development tasks. GitHub issues and task boards were used to track progress and assign tasks. Each team member committed code regularly and followed proper commenting practices in Git commits.
+- All team members contributed equally to the development tasks. 
