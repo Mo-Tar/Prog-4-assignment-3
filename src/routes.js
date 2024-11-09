@@ -12,7 +12,9 @@ module.exports.register = (app, database) => {
         const query = database.query('SELECT * FROM Inventory WHERE ItemID = ?', [_id]);
 
         const inventoryItems = await query;
-
+        if(inventoryItems.length === 0){
+            return res.status(404).json({ error: "Cannot find Item ID" });
+        }
         res.status(200).send(JSON.stringify(inventoryItems)).end();
     });
 
@@ -56,41 +58,97 @@ module.exports.register = (app, database) => {
         res.status(200).send(JSON.stringify(supplier)).end();
     });
 
-    //Body parameter to add new items to inventory
     app.post('/api/items', async (req, res) => {
-        const { ItemID, Name, Quantity, Price, SupplierID } = req.body;
-        
-        await database.query('INSERT INTO Inventory (ItemID, Name, Quantity, Price, SupplierID) values (?, ?, ?, ?, ?)', [ItemID, Name, Quantity, Price, SupplierID]);
+        try {
+ 
+            const { ItemID, Name, Quantity, Price, SupplierID } = req.body;
+            
+            if (!ItemID || !Name || Quantity === undefined || Price === undefined || !SupplierID) {
+                return res.status(400).json({ error: "All fields ItemID, Name, Quantity, Price, SupplierID are required." });
+            }
+    
+    
+            const result = await database.query(
+                'INSERT INTO Inventory (ItemID, Name, Quantity, Price, SupplierID) VALUES (?, ?, ?, ?, ?)',
+                [ItemID, Name, Quantity, Price, SupplierID]
+            );
+    
+           
+            if (result.affectedRows === 0) {
+                return res.status(500).json({ error: "Failed to insert item into inventory." });
+            }
 
-        res.json({ status: "Success" });
+
+    
+            res.json({ status: "Success", insertedItemID: result.insertId });
+        } catch (error) {
+            console.error("Error inserting item:", error);
+
+            if (error.code === 'ER_DUP_ENTRY') {
+                res.status(409).json({ error: "An item with the same ItemID already exists." });
+            } else {
+                res.status(500).json({ error: "An error occurred while adding the item." });
+            }
+        }
     });
+    
 
     //Modifying quantity of an item when given specific itemID
     app.put('/api/items', async (req, res) => {
+        try {
+
         const { ItemID, Quantity } = req.body;
-        
-        await database.query('UPDATE Inventory SET Quantity = ? WHERE ItemID = ?', [Quantity, ItemID]);
 
-        res.json({ status: "Success" });
-    });
+        const inventoryItems = await database.query('UPDATE Inventory SET Quantity = ? WHERE ItemID = ?', [Quantity, ItemID]);
 
-    //Delete an item if matching name or id
-    app.delete('/api/items/:identifier', async (req, res) => {
-        const identifier = req.params.identifier;
-        let query = 'DELETE FROM INVENTORY WHERE ItemID = ?';
-        let params = [identifier];
-
-        if (isNaN(identifier)) {
-            query = 'DELETE FROM INVENTORY WHERE Name = ?';
-            params = [identifier];
+        if (!ItemID && !Quantity) {
+            return res.status(400).json({ error: "Please provide 'ItemID' and 'Quantity' in the body" });
         }
 
-        const [results] = await database.query(query, params);
-
-        if (results.affectedRows === 0) {
-            res.json({ status: "Error", message: "No item with matching ID or name found" });
-        } else {
+        if (inventoryItems.affectedRows === 0){
+            return res.status(400).json({ error: "No items found" });
+        }
+        else {
             res.json({ status: "Success" });
+        }
+
+        } catch {
+            console.error("Error updating item:", error);
+            res.status(500).json({ error: "An error occurred while updating the item." });
+        }
+    });
+
+    //Deletes an item when given name or id
+    app.delete('/api/items/', async (req, res) => {
+        try {
+            let query;
+            const _name = req.query.name;
+            const _id = req.query.id;
+            
+
+            if (!_name && !_id) {
+                return res.status(400).json({ error: "Please provide either 'name' or 'id' as a query parameter." });
+            }
+    
+
+            if (_name) {
+                query = database.query('DELETE FROM Inventory WHERE name = ?', [_name]);
+            } else if (_id) {
+                query = database.query('DELETE FROM Inventory WHERE ItemID = ?', [_id]);
+            }
+    
+
+            const inventoryItems = await query;
+            if (inventoryItems.affectedRows === 0){
+                return res.status(400).json({ error: "No items found" });
+            }
+            else {
+                res.json({ status: "Success", deletedItems: inventoryItems.affectedRows });
+            }
+
+        } catch (error) {
+            console.error("Error deleting item:", error);
+            res.status(500).json({ error: "An error occurred while deleting the item." });
         }
     });
 };
