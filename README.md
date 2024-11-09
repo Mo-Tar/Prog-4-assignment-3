@@ -16,7 +16,7 @@ No authentication is required for this API.
 - [GET /api/items/{id}](#get-items-by-id)
 - [POST /api/items](#post-items)
 - [PUT /api/items](#put-items-by-id)
-- [DELETE /api/items}](#delete-items-by-id)
+- [DELETE /api/items](#delete-items-by-id)
 
 ---
 
@@ -34,7 +34,7 @@ No authentication is required for this API.
 
 **Example Request**:
 - `GET /api/items`
-- `GET /api/items/?name=Knock Bits`
+- `GET /api/items?name=Knock Bits`
 
 ---
 
