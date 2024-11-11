@@ -1,6 +1,0 @@
-.gcloudignore
-.DS_Store
-.env
-node_modules
-cloud_sql_proxy
-*.code-workspace
